@@ -1,0 +1,18 @@
+{
+    "name": "vercel-docker",
+    "module": "index.ts",
+    "type": "module",
+    "private": true,
+    "scripts": {
+        "dev": "bun --watch index.ts",
+        "compile": "bun build index.ts --compile --outfile dist/server",
+        "deploy": "vercel deploy",
+        "deploy:prod": "vercel deploy --prod"
+    },
+    "devDependencies": {
+        "@types/bun": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}

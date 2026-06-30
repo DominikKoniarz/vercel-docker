@@ -1,0 +1,29 @@
+FROM oven/bun:1 AS build
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN bun install
+
+COPY index.ts .
+COPY index.html .
+
+# ARG TARGETARCH
+# RUN case "$TARGETARCH" in \
+#       arm64) BUN_TARGET=bun-linux-arm64 ;; \
+#       *) BUN_TARGET=bun-linux-x64 ;; \
+#     esac && \
+#     bun build index.ts --compile --target="$BUN_TARGET" --outfile dist/server
+
+RUN bun build index.ts --compile --outfile dist/server
+
+FROM gcr.io/distroless/base-debian12 AS runtime
+
+WORKDIR /app
+
+COPY --from=build /app/dist/server /app/server
+
+EXPOSE 3000
+
+CMD ["/app/server"]

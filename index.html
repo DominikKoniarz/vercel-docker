@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Vercel Docker</title>
+    </head>
+    <body>
+        <h1>Hello World</h1>
+        <button type="button">Get random number from API</button>
+        <p>Random number: <span id="random-number">0</span></p>
+        <script>
+            const button = document.querySelector("button");
+
+            button.addEventListener("click", () => {
+                fetch("/api/random-number")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        document.getElementById("random-number").textContent =
+                            data.number;
+                    });
+            });
+        </script>
+    </body>
+</html>
