@@ -7,7 +7,9 @@
         "dev": "bun --watch index.ts",
         "compile": "bun build index.ts --compile --outfile dist/server",
         "deploy": "vercel deploy",
-        "deploy:prod": "vercel deploy --prod"
+        "deploy:prod": "vercel deploy --prod",
+        "docker:build": "docker build -f Dockerfile.vercel -t vercel-docker .",
+        "docker:run": "docker run --rm --init -p 3000:3000 vercel-docker "
     },
     "devDependencies": {
         "@types/bun": "latest"

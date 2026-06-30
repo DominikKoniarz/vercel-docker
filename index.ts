@@ -1,13 +1,41 @@
-import index from "./index.html";
+import { randomBytes } from "node:crypto";
+
+const ETag = randomBytes(16).toString("hex");
+
+const index = Bun.file("./index.html");
 
 const server = Bun.serve({
     port: process.env.PORT || 3000,
     hostname: "0.0.0.0",
     routes: {
-        "/": index,
+        "/": {
+            GET: (req) => {
+                const ifNoneMatch = req.headers.get("If-None-Match");
+
+                if (ifNoneMatch === ETag) {
+                    return new Response("Not modified", {
+                        status: 304,
+                        headers: {
+                            "Cache-Control":
+                                "private, max-age=3600, must-revalidate",
+                        },
+                    });
+                }
+
+                return new Response(index, {
+                    headers: {
+                        ETag: ETag,
+                        "Cache-Control":
+                            "private, max-age=3600, must-revalidate",
+                    },
+                });
+            },
+        },
         "/api/random-number": {
             GET: () => {
-                return new Response(JSON.stringify({ number: Math.random() }));
+                const number = Math.random();
+
+                return new Response(JSON.stringify({ number }), {});
             },
         },
     },

@@ -22,6 +22,7 @@ FROM gcr.io/distroless/base-debian12 AS runtime
 
 WORKDIR /app
 
+COPY --from=build /app/index.html /app/index.html
 COPY --from=build /app/dist/server /app/server
 
 EXPOSE 3000
